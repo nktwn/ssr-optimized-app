@@ -67,26 +67,28 @@ export default function Header() {
                     </div>
 
                     {open && (
-                        <div className="md:hidden pb-4">
-                            <div className="grid gap-2">
-                                {nav.map((item) => {
-                                    const active = isActive(item.href);
-                                    return (
-                                        <Link
-                                            key={item.href}
-                                            href={item.href}
-                                            onClick={() => setOpen(false)}
-                                            className={[
-                                                'px-3 py-3 rounded-xl text-sm font-medium no-underline transition border',
-                                                active
-                                                    ? 'bg-slate-900 text-white border-slate-900'
-                                                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50',
-                                            ].join(' ')}
-                                        >
-                                            {item.label}
-                                        </Link>
-                                    );
-                                })}
+                        <div className="md:hidden pb-4 absolute left-0 right-0 top-16 bg-white/90 backdrop-blur border-b border-slate-200">
+                            <div className="container mx-auto px-4 py-4">
+                                <div className="grid gap-2">
+                                    {nav.map((item) => {
+                                        const active = isActive(item.href);
+                                        return (
+                                            <Link
+                                                key={item.href}
+                                                href={item.href}
+                                                onClick={() => setOpen(false)}
+                                                className={[
+                                                    'px-3 py-3 rounded-xl text-sm font-medium no-underline transition border',
+                                                    active
+                                                        ? 'bg-slate-900 text-white border-slate-900'
+                                                        : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50',
+                                                ].join(' ')}
+                                            >
+                                                {item.label}
+                                            </Link>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         </div>
                     )}

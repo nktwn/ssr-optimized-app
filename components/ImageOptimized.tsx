@@ -1,36 +1,66 @@
-import Image from 'next/image';
+import Image, { type ImageProps } from 'next/image';
 
-interface ImageOptimizedProps {
-    src: string;
+type Base = {
+    src: ImageProps['src'];
     alt: string;
-    width?: number;
-    height?: number;
     priority?: boolean;
     className?: string;
+    sizes?: string;
+    quality?: number;
+};
+
+type FillVariant = Base & {
+    fill: true;
+    width?: never;
+    height?: never;
+};
+
+type FixedVariant = Base & {
+    width: number;
+    height: number;
+    fill?: false;
+};
+
+type Props = FillVariant | FixedVariant;
+
+function isFill(p: Props): p is FillVariant {
+    return (p as FillVariant).fill === true;
 }
 
-export default function ImageOptimized({
-                                           src,
-                                           alt,
-                                           width,
-                                           height,
-                                           priority = false,
-                                           className = '',
-                                       }: ImageOptimizedProps) {
+export default function ImageOptimized(props: Props) {
+    const {
+        src,
+        alt,
+        priority = false,
+        className = '',
+        sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
+        quality = 80,
+    } = props;
+
+    const common: Omit<ImageProps, 'src' | 'alt' | 'fill' | 'width' | 'height'> = {
+        priority,
+        loading: priority ? 'eager' : 'lazy',
+        sizes,
+        quality,
+        className: `object-cover ${className}`,
+        placeholder: 'empty',
+    };
+
+    if (isFill(props)) {
+        return (
+            <div className="relative">
+                <Image src={src} alt={alt} fill {...common} />
+            </div>
+        );
+    }
+
     return (
-        <div className={`relative ${className}`}>
-            <Image
-                src={src}
-                alt={alt}
-                width={width}
-                height={height}
-                priority={priority}
-                loading={priority ? 'eager' : 'lazy'}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="object-cover"
-                placeholder="blur"
-                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLSQySi0pLisuJjI6UDg2OTozLCctJkRAUFFPPyQ4XEtSV1VNXFRjYUX/2wBDAR..."
-            />
-        </div>
+        <Image
+            src={src}
+            alt={alt}
+            width={props.width}
+            height={props.height}
+            {...common}
+        />
     );
 }

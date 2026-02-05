@@ -34,7 +34,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         </div>
                     </div>
                     <div className="text-sm text-slate-600">
-                        © {new Date().getFullYear()} • Built for performance
+                        <span suppressHydrationWarning>
+                          © {new Date().getFullYear()} • Built for performance
+                        </span>
                     </div>
                 </div>
             </div>
