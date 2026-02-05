@@ -19,7 +19,7 @@ type Comment = {
 
 export async function generateStaticParams() {
     const res = await fetch('https://jsonplaceholder.typicode.com/posts', {
-        next: { revalidate: 60 },
+        cache: 'force-cache',
     });
 
     const posts: Post[] = await res.json();
@@ -31,7 +31,7 @@ export async function generateStaticParams() {
 
 async function getPost(id: string): Promise<Post | null> {
     const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
-        next: { revalidate: 60 },
+        cache: 'force-cache',
     });
 
     if (!res.ok) return null;
@@ -42,7 +42,7 @@ async function getComments(id: string): Promise<Comment[]> {
     const res = await fetch(
         `https://jsonplaceholder.typicode.com/posts/${id}/comments`,
         {
-            next: { revalidate: 60 },
+            cache: 'force-cache',
         }
     );
 
